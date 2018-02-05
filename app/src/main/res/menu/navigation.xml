@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2018 Halcyon Mobile
+  ~ http://www.halcyonmobile.com
+  ~ All rights reserved.
+  -->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/agenda"
+        android:icon="@drawable/ic_agenda_24dp"
+        android:title="@string/agenda"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/speakers"
+        android:icon="@drawable/ic_people_24dp"
+        android:title="@string/speakers"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/info"
+        android:icon="@drawable/ic_info_24dp"
+        android:title="@string/info"
+        app:showAsAction="ifRoom" />
+
+</menu>
