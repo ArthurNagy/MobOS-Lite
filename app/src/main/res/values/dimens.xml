@@ -10,4 +10,5 @@
     <dimen name="bottom_nav_height">56dp</dimen>
     <dimen name="placeholder_icon_size">72dp</dimen>
     <dimen name="content_padding">8dp</dimen>
+    <dimen name="progress_height">4dp</dimen>
 </resources>
