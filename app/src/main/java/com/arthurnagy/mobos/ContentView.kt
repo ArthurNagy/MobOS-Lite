@@ -8,8 +8,10 @@ package com.arthurnagy.mobos
 
 import android.content.Context
 import android.net.ConnectivityManager
+import android.support.annotation.Px
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -25,6 +27,7 @@ class ContentView @JvmOverloads constructor(context: Context, attrs: AttributeSe
     private val progressBar by lazy { findViewById<ProgressBar>(R.id.progress) }
     private val message by lazy { findViewById<TextView>(R.id.message) }
     private val icon by lazy { findViewById<ImageView>(R.id.icon) }
+    var onTitleReceived: ((String) -> Unit)? = null
 
     init {
         LayoutInflater.from(context).inflate(R.layout.view_content, this, true)
@@ -37,8 +40,16 @@ class ContentView @JvmOverloads constructor(context: Context, attrs: AttributeSe
                 }
             }
 
-            override fun onTitleReceived(title: String) = Unit
+            override fun onTitleReceived(title: String) {
+                onTitleReceived?.invoke(title)
+            }
         }
+    }
+
+    fun setWebViewMarginTop(@Px marginTop: Int) {
+        val layoutParams = content.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(layoutParams.leftMargin, marginTop, layoutParams.rightMargin, layoutParams.bottomMargin)
+        content.layoutParams = layoutParams
     }
 
     fun loadContent(entry: MobOsWebView.Entry) {

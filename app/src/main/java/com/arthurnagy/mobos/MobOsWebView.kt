@@ -24,6 +24,7 @@ class MobOsWebView : WebView {
 
     var callback: Callback? = null
     var entry: Entry? = null
+    var initialUrl: String? = null
 
     @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr)
 
@@ -32,6 +33,16 @@ class MobOsWebView : WebView {
 
     init {
         webViewClient = object : WebViewClient() {
+
+            override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                Log.d("MobOsWebView", "shouldOverrideUrlLoading: $url")
+                return if (url == initialUrl) {
+                    false
+                } else {
+                    DetailActivity.start(context, url)
+                    true
+                }
+            }
 
             override fun onPageFinished(view: WebView, url: String) {
                 entry?.let { view.loadUrl(showOnlyContentJsCode(it)) }
@@ -63,7 +74,11 @@ class MobOsWebView : WebView {
 
     fun load(entry: Entry) {
         this.entry = entry
-        this.loadUrl("$BASE_URL${entry.key}")
+        initialUrl = when (entry) {
+            is Entry.Agenda, Entry.Speakers -> "$BASE_URL${entry.key}"
+            is Entry.Detail -> entry.url
+        }
+        this.loadUrl(initialUrl)
     }
 
     interface Callback {
@@ -74,6 +89,7 @@ class MobOsWebView : WebView {
     sealed class Entry(val key: String, val contentKey: String) {
         data class Agenda(val day: Int) : Entry("agenda", "entry-content")
         object Speakers : Entry("speakers", "hentry")
+        data class Detail(val url: String) : Entry("detail", "entry-content")
     }
 
     private class WebAppInterface {
@@ -87,6 +103,7 @@ class MobOsWebView : WebView {
 
     companion object {
         const val BASE_URL = "http://romobos.com/5th-edition/"
+        const val BASE_URL_BLOG = "http://romobos.com/blog/"
         fun showOnlyContentJsCode(entry: Entry) = """javascript:
                                     function hideAllExceptContent() {
                                         var el = document.getElementsByClassName('${entry.contentKey}')[0];
@@ -157,6 +174,7 @@ class MobOsWebView : WebView {
                     Android.log(err.message);
                 }
             """
+            is Entry.Detail -> ""
         }
     }
 
