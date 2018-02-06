@@ -166,6 +166,12 @@ class MobOsWebView : WebView {
                         var tableRows = tableBody.getElementsByTagName('TR');
                         Android.log(tableRows[0].innerHtml);
                         tableRows[0].style.display = 'none';
+                        var colDate = document.createElement("COL");
+                        colDate.width = "35%";
+                        var colTitle = document.createElement("COL");
+                        colTitle.width = "65%";
+                        table.appendChild(colDate);
+                        table.appendChild(colTitle);
                     }
                 };
                 try {
