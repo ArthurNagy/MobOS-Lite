@@ -20,8 +20,8 @@ class DetailActivity : AppCompatActivity() {
         setContentView(contentView)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         contentView.setWebViewMarginTop(resources.getDimensionPixelOffset(R.dimen.web_view_margin_top) + resources.getDimensionPixelOffset(R.dimen.detail_content_top_padding))
-        contentView.loadContent(MobOsWebView.Entry.Detail(intent.getStringExtra(URL)))
-        contentView.onTitleReceived = { title = it }
+        contentView.loadContent(intent.getParcelableExtra(ENTRY))
+        contentView.onTitleReceived = { title = it.replace(Regex.escapeReplacement(TITLE_MOB_OS), "") }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -30,10 +30,12 @@ class DetailActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val URL = "url"
-        fun start(context: Context, url: String) {
-            context.startActivity(Intent(context, DetailActivity::class.java).putExtra(URL, url))
+        private const val ENTRY = "entry"
+        private const val TITLE_MOB_OS = "| Mobos Conference"
+        fun start(context: Context, entry: MobOsWebView.Entry) {
+            context.startActivity(Intent(context, DetailActivity::class.java).putExtra(ENTRY, entry))
         }
+
     }
 
 }

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+  ~ Copyright (c) 2018 Halcyon Mobile
+  ~ http://www.halcyonmobile.com
+  ~ All rights reserved.
+  -->
+
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:layout_height="match_parent"
+    tools:layout_width="match_parent"
+    tools:parentTag="android.widget.ScrollView">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/partners"
+            style="@style/InfoText"
+            android:text="@string/partners" />
+
+        <View
+            android:id="@+id/divider_partners"
+            style="@style/InfoDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/partners" />
+
+        <TextView
+            android:id="@+id/team"
+            style="@style/InfoText"
+            android:text="@string/team"
+            app:layout_constraintTop_toBottomOf="@id/divider_partners" />
+
+        <View
+            android:id="@+id/divider_team"
+            style="@style/InfoDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/team" />
+
+        <TextView
+            android:id="@+id/coc"
+            style="@style/InfoText"
+            android:text="@string/coc"
+            app:layout_constraintTop_toBottomOf="@id/divider_team" />
+
+        <View
+            android:id="@+id/divider_coc"
+            style="@style/InfoDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/coc" />
+
+        <TextView
+            android:id="@+id/registration"
+            style="@style/InfoText"
+            android:text="@string/registration"
+            app:layout_constraintTop_toBottomOf="@id/divider_coc" />
+
+        <View
+            android:id="@+id/divider_registration"
+            style="@style/InfoDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registration" />
+
+        <TextView
+            android:id="@+id/venue"
+            style="@style/InfoText"
+            android:text="@string/venue"
+            app:layout_constraintTop_toBottomOf="@id/divider_registration" />
+
+        <View
+            android:id="@+id/divider_venue"
+            style="@style/InfoDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/venue" />
+
+        <TextView
+            android:id="@+id/github"
+            style="@style/InfoText"
+            android:text="@string/view_on_github"
+            app:layout_constraintTop_toBottomOf="@id/divider_venue" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</merge>

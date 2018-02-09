@@ -6,6 +6,8 @@
 
 package com.arthurnagy.mobos
 
+import android.test.MoreAsserts.assertEquals
+
 /**
  * Example local unit test, which will execute on the development machine (host).
  *

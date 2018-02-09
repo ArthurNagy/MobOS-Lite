@@ -40,26 +40,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadPage(itemId: Int) {
         container.removeAllViews()
-        val page: ViewGroup
-        when (itemId) {
+        tab.visibility = if (itemId == R.id.agenda) View.VISIBLE else View.GONE
+        val page: ViewGroup = pages[itemId] ?: when (itemId) {
             R.id.agenda -> {
-                tab.visibility = View.VISIBLE
-                page = pages[itemId] ?: createAgendaPager().also {
+                createAgendaPager().also {
                     pages[itemId] = it
                     tab.setupWithViewPager(it)
                 }
-                container.addView(page)
+
             }
             R.id.speakers -> {
-                tab.visibility = View.GONE
-                page = pages[itemId] ?: ContentView(this)
-                        .apply { loadContent(MobOsWebView.Entry.Speakers) }
+                ContentView(this)
+                        .apply { loadContent(MobOsWebView.Entry.Speakers()) }
                         .also { pages[itemId] = it }
-                container.addView(page)
             }
-            R.id.info -> TODO()
-            else -> TODO()
+            R.id.info -> {
+                InfoView(this).also { pages[itemId] = it }
+            }
+            else -> throw IllegalStateException("Shouldn't be here")
         }
+        container.addView(page)
 
     }
 

@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2018 Halcyon Mobile
  * http://www.halcyonmobile.com
@@ -5,6 +6,8 @@
  */
 
 package com.arthurnagy.mobos
+
+import android.test.MoreAsserts.assertEquals
 
 /**
  * Instrumented test, which will execute on an Android device.

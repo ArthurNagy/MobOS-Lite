@@ -8,8 +8,7 @@ package com.arthurnagy.mobos
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
-import android.support.annotation.RequiresApi
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.util.Log
 import android.view.KeyEvent
@@ -18,18 +17,14 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import kotlinx.android.parcel.Parcelize
 
 @SuppressLint("SetJavaScriptEnabled")
-class MobOsWebView : WebView {
+class MobOsWebView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : WebView(context, attrs, defStyleAttr) {
 
     var callback: Callback? = null
     var entry: Entry? = null
     var initialUrl: String? = null
-
-    @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : super(context, attrs, defStyleAttr)
-
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyleRes: Int = 0) : super(context, attrs, defStyleAttr, defStyleRes)
 
     init {
         webViewClient = object : WebViewClient() {
@@ -39,7 +34,7 @@ class MobOsWebView : WebView {
                 return if (url == initialUrl) {
                     false
                 } else {
-                    DetailActivity.start(context, url)
+                    DetailActivity.start(context, Entry.Detail(url))
                     true
                 }
             }
@@ -75,7 +70,7 @@ class MobOsWebView : WebView {
     fun load(entry: Entry) {
         this.entry = entry
         initialUrl = when (entry) {
-            is Entry.Agenda, Entry.Speakers -> "$BASE_URL${entry.key}"
+            is Entry.Agenda, is Entry.Speakers, is Entry.Partners, is Entry.Team, is Entry.CoC, is Entry.Registration -> "$BASE_URL${entry.key}"
             is Entry.Detail -> entry.url
         }
         this.loadUrl(initialUrl)
@@ -86,10 +81,28 @@ class MobOsWebView : WebView {
         fun onTitleReceived(title: String)
     }
 
-    sealed class Entry(val key: String, val contentKey: String) {
-        data class Agenda(val day: Int) : Entry("agenda", "entry-content")
-        object Speakers : Entry("speakers", "hentry")
-        data class Detail(val url: String) : Entry("detail", "entry-content")
+    @SuppressLint("ParcelCreator")
+    sealed class Entry(val key: String, val contentKey: String) : Parcelable {
+        @Parcelize
+        class Agenda(val day: Int) : Entry("agenda", "entry-content")
+
+        @Parcelize
+        class Speakers : Entry("speakers", "hentry")
+
+        @Parcelize
+        class Detail(val url: String) : Entry("detail", "entry-content")
+
+        @Parcelize
+        class Partners : Entry("partners", "container row")
+
+        @Parcelize
+        class Team : Entry("the-team", "entry-content")
+
+        @Parcelize
+        class CoC : Entry("code-of-conduct-mobos-2018", "entry-content")
+
+        @Parcelize
+        class Registration : Entry("registration", "entry-content")
     }
 
     private class WebAppInterface {
@@ -103,7 +116,6 @@ class MobOsWebView : WebView {
 
     companion object {
         const val BASE_URL = "http://romobos.com/5th-edition/"
-        const val BASE_URL_BLOG = "http://romobos.com/blog/"
         fun showOnlyContentJsCode(entry: Entry) = """javascript:
                                     function hideAllExceptContent() {
                                         var el = document.getElementsByClassName('${entry.contentKey}')[0];
@@ -126,7 +138,7 @@ class MobOsWebView : WebView {
                                     ${hideAdditionalElements(entry)}"""
 
         private fun hideAdditionalElements(entry: Entry): String = when (entry) {
-            Entry.Speakers -> """
+            is MobOsWebView.Entry.Speakers -> """
                 function hideAdditionalElements() {
                     document.getElementsByClassName('entry-header')[0].style.display = 'none';
                     var content = document.getElementsByClassName('${entry.contentKey}')[0];
@@ -145,7 +157,7 @@ class MobOsWebView : WebView {
                     Android.log(err.message);
                 }
                 """
-            is Entry.Agenda -> """
+            is MobOsWebView.Entry.Agenda -> """
                 function hideAdditionalElements() {
                    var androidTables = document.getElementsByClassName('table1');
                    var el = androidTables[${entry.day}];
@@ -180,7 +192,11 @@ class MobOsWebView : WebView {
                     Android.log(err.message);
                 }
             """
-            is Entry.Detail -> ""
+            is MobOsWebView.Entry.Detail -> ""
+            is MobOsWebView.Entry.Partners -> ""
+            is MobOsWebView.Entry.Team -> ""
+            is MobOsWebView.Entry.CoC -> ""
+            is MobOsWebView.Entry.Registration -> ""
         }
     }
 

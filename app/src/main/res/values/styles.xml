@@ -24,4 +24,25 @@
         <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
     </style>
 
+    <style name="TextAppearanceInfo" parent="TextAppearance.AppCompat.Subhead">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="InfoText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+        <item name="android:padding">@dimen/info_padding</item>
+        <item name="android:textAppearance">@style/TextAppearanceInfo</item>
+    </style>
+
+    <style name="InfoDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginEnd">@dimen/info_padding</item>
+        <item name="android:layout_marginStart">@dimen/info_padding</item>
+        <item name="android:background">?attr/colorButtonNormal</item>
+    </style>
+
 </resources>
