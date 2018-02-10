@@ -1,10 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2018 Halcyon Mobile
-  ~ http://www.halcyonmobile.com
-  ~ All rights reserved.
-  -->
-
 <resources>
     <dimen name="bottom_nav_elevation">8dp</dimen>
     <dimen name="web_view_margin_top">-80dp</dimen>

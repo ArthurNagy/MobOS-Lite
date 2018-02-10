@@ -1,14 +1,8 @@
-<!--
-  ~ Copyright (c) 2018 Halcyon Mobile
-  ~ http://www.halcyonmobile.com
-  ~ All rights reserved.
-  -->
-
 <resources>
 
     <string name="app_name">MobOS Lite</string>
 
-    <string name="agenda">Agenda</string>
+    <string name="schedule">Schedule</string>
     <string name="speakers">Speakers</string>
     <string name="info">Info</string>
 

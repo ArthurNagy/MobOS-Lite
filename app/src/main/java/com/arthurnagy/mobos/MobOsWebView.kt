@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2018 Halcyon Mobile
- * http://www.halcyonmobile.com
- * All rights reserved.
- */
-
 package com.arthurnagy.mobos
 
 import android.annotation.SuppressLint
@@ -17,6 +11,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.crashlytics.android.Crashlytics
 import kotlinx.android.parcel.Parcelize
 
 @SuppressLint("SetJavaScriptEnabled")
@@ -29,6 +24,7 @@ class MobOsWebView @JvmOverloads constructor(context: Context, attrs: AttributeS
     init {
         webViewClient = object : WebViewClient() {
 
+            @Suppress("OverridingDeprecatedMember")
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 Log.d("MobOsWebView", "shouldOverrideUrlLoading: $url")
                 return if (url == initialUrl) {
@@ -110,6 +106,7 @@ class MobOsWebView @JvmOverloads constructor(context: Context, attrs: AttributeS
         @JavascriptInterface
         fun log(message: String) {
             Log.d("MobOsWebView", message)
+            Crashlytics.log("MobOsWebView $message")
         }
 
     }

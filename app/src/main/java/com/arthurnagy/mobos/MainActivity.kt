@@ -1,9 +1,3 @@
-/*
- * Copyright (c) 2018 Halcyon Mobile
- * http://www.halcyonmobile.com
- * All rights reserved.
- */
-
 package com.arthurnagy.mobos
 
 import android.os.Bundle
@@ -17,15 +11,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import com.crashlytics.android.Crashlytics
 
 class MainActivity : AppCompatActivity() {
 
     private val pages = mutableMapOf<Int, ViewGroup>()
     private val container by lazy { findViewById<FrameLayout>(R.id.page_container) }
     private val tab by lazy { findViewById<TabLayout>(R.id.tab) }
+    private var selectedItemId: Int = R.id.schedule
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        selectedItemId = savedInstanceState?.getInt(SELECTED_ID) ?: R.id.schedule
         setContentView(R.layout.activity_main)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -35,32 +32,27 @@ class MainActivity : AppCompatActivity() {
             loadPage(item.itemId)
             true
         }
-        bottomNavigationView.selectedItemId = R.id.agenda
+        bottomNavigationView.selectedItemId = selectedItemId
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putInt(SELECTED_ID, selectedItemId)
     }
 
     private fun loadPage(itemId: Int) {
         container.removeAllViews()
-        tab.visibility = if (itemId == R.id.agenda) View.VISIBLE else View.GONE
+        tab.visibility = if (itemId == R.id.schedule) View.VISIBLE else View.GONE
         val page: ViewGroup = pages[itemId] ?: when (itemId) {
-            R.id.agenda -> {
-                createAgendaPager().also {
-                    pages[itemId] = it
-                    tab.setupWithViewPager(it)
-                }
-
+            R.id.schedule -> createAgendaPager().also { tab.setupWithViewPager(it) }
+            R.id.speakers -> ContentView(this).apply { loadContent(MobOsWebView.Entry.Speakers()) }
+            R.id.info -> InfoView(this)
+            else -> {
+                Crashlytics.log("MainActivity: loadPage: itemId: $itemId")
+                createAgendaPager().also { tab.setupWithViewPager(it) }
             }
-            R.id.speakers -> {
-                ContentView(this)
-                        .apply { loadContent(MobOsWebView.Entry.Speakers()) }
-                        .also { pages[itemId] = it }
-            }
-            R.id.info -> {
-                InfoView(this).also { pages[itemId] = it }
-            }
-            else -> throw IllegalStateException("Shouldn't be here")
-        }
+        }.also { pages[itemId] = it }
         container.addView(page)
-
     }
 
     private fun createAgendaPager() = (LayoutInflater.from(this).inflate(R.layout.view_agenda, container, false) as ViewPager).apply {
@@ -80,10 +72,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getTitleResource(itemId: Int) = when (itemId) {
-        R.id.agenda -> R.string.agenda
+        R.id.schedule -> R.string.schedule
         R.id.speakers -> R.string.speakers
         R.id.info -> R.string.info
         else -> R.string.app_name
+    }
+
+    companion object {
+        private const val SELECTED_ID = "selectedId"
     }
 
 }
